@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <title>socket test</title>
+  <script src="/socket.io/socket.io.js"></script>
+  <script src="https://code.jquery.com/jquery-1.11.1.js"></script>
+</head>
+
+<body>
+
+  <fieldset>
+    <legend>部屋の移動</legend>
+    <input id="input_room" placeholder="部屋ナンバー" />
+  </fieldset>
+
+
+  <section>
+    <h2>メッセージ一覧</h2>
+    <ul id="messages">
+      <li>こんにちは。まだメッセージはありません。</li>
+    </ul>
+  </section>
+
+
+  <form id="message_form" action="#">
+    <input id="input_msg" autocomplete="off" /><button>送信</button>
+
+    <input type="checkbox" id="isSendToAll" name="isSendToAll" checked>
+    <label for="isSendToAll">部屋関係なく送る</label>
+  </form>
+
+  <script>
+    const socketio = io();
+
+    /**
+     * 
+     * 
+     * 部屋の処理まとめ
+     * 
+     * 
+     **/
+    // 部屋に入る
+    const joinRoom = (roomkey) => {
+      socketio.emit('joinRoom', roomkey);
+    }
+    // 全ての部屋を抜ける
+    const leaveRoom = () => {
+      socketio.emit('leaveRoom');
+    }
+
+    // 部屋に対しメッセージを送る
+    const sendMessageToRoom = (roomkey, text) => {
+      socketio.emit('sendMessageRoom', { "room_key": roomkey, "text": text });
+    }
+
+    // 部屋のメッセージを受け取る
+    socketio.on('getMessageRoom', function (text) {
+      appendMessage(text);
+    })
+
+
+    /**
+     * 
+     * 部屋関係ない処理
+     * 
+     **/
+    // 部屋に対しメッセージを送る
+    const sendMessage = (text) => {
+      socketio.emit('sendMessage', { "text": text });
+    }
+
+    // 部屋のメッセージを受け取る
+    socketio.on('getMessage', function (text) {
+      appendMessage(text);
+    })
+
+
+    /**
+     * 
+     * 
+     * 
+     * 実行する
+     * 
+     * 
+     * 
+     **/
+    // メッセージ追加する
+    const appendMessage = (text) => {
+      $('#messages').append($('<li>').text(text));
+    }
+    // 部屋の移動処理
+    $('#input_room').keyup(function () {
+      leaveRoom()
+      
+      const val = $(this).val();
+      joinRoom(val)
+
+      $("#isSendToAll").prop('checked', false);
+    })
+
+    // 送信時の処理
+    $('#message_form').submit(function () {
+      const text = $('#input_msg').val();
+      const roomKey = $("#input_room").val();
+      const isSendToAll = $("#isSendToAll").prop('checked');
+
+      if (isSendToAll) {
+        sendMessage(text)
+      } else {
+        sendMessageToRoom(roomKey, text)
+      }
+
+
+      $('#input_msg').val('');
+      return false;
+    });
+  </script>
+</body>
+
+</html>
