@@ -1,8 +1,8 @@
 # What Socket.io is
 
-![リアルタイム通信](https://github.com/ryofujimotox/nodejs_socketio/blob/main/realtime_chat.gif "リアルタイム通信")
+![リアルタイム通信](https://raw.githubusercontent.com/ryofujimotox/nodejs_socketio/main/images/realtime_chat.gif "リアルタイム通信")
 
-![部屋へのリアルタイム通信](https://github.com/ryofujimotox/nodejs_socketio/blob/main/realtime_chat_room.gif "部屋へのリアルタイム通信")
+![部屋へのリアルタイム通信](https://raw.githubusercontent.com/ryofujimotox/nodejs_socketio/main/images/realtime_chat_room.gif "部屋へのリアルタイム通信")
 
 
 # Install
