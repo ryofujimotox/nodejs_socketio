@@ -10,6 +10,8 @@ io.on('connection', function (socket) {
   socket.on('sendMessage', function (param) {
     const {text} = param;
 
+    console.log("ALL", param)
+
     //　送信する。 socket.on('getMessage')で取得できる
     io.emit('getMessage', text);
   });
@@ -37,6 +39,8 @@ io.on('connection', function (socket) {
   // 部屋に対しテキストを送る
   socket.on('sendMessageRoom', function (param) {
     const {room_key, text} = param;
+
+    console.log("ROOM", param)
 
     // 上でjoinした人だけが、 socket.on('getMessageRoom')で取得できる
     io.to(room_key).emit('getMessageRoom', text);
